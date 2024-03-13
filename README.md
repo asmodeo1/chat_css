@@ -33,4 +33,3 @@ Algunas propiedades a usar:
 - vertical-align: alineación vertical de un elemento
 - width: ancho de un elemento
 
-  - 
