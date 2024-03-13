@@ -8,8 +8,11 @@ Algunas consideraciones son:
   -  usar display a inline-block en las columnas, aunque tendremos el problema de conseguir que ambas columnas tengan la misma altura
   -  usar Flexbox o Grid que aún no hemos estudiado
   -  usar display a table en el contenedor principal de los mensajes y display a table-cell en las columnas. En este ejercicio vamos a usar esto. Este modo dará un problema en el borde redondeado, sobresaliendo una zona rectangular. La solución es usar overflow: hidden en el contenedor de los mensajes
+ 
 
-ALgunas propiedades a usar:
+En el fichero resultado Chat.pdf tenemos como debe quedar, teniendo en cuenta que la sombra amarilla tan exagerada es problema de la creación de documento PDF; en el ejercicio debe ser una sombra menos llamativa.
+
+Algunas propiedades a usar:
 - color: color del texto
 - background-color: color del fondo
 - background-image: imagen de fondo
