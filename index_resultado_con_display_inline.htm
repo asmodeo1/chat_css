@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Foro electrónica</title>
+    <style>
+      @font-face {
+        font-family: neutrons; /* Un nombre cualquiera que luego usaremos en 
+                            la propiedad font-familiy de otros sleectores */
+        src: url(fuentes/NeutronsDemoRegular.ttf);
+      }
+      /* Puede ser útil eliminar todos los márgenes, paddings, bordes, poner el tamaño
+      de la letra al mismo para todo, .... para que no queden luego márgenes o espaciados 
+      no esperados que nos den problemas. Luego con CSS ya pondremos los deseados a cada
+      elemento. A esto se le conoce con CSS Reset */
+      * {
+        margin: 0;
+        border: 0;
+        padding: 0;
+        font-size: 100%; /* Mismo tamaño de letra para todo */
+      }
+      body {
+        background-image: url(imagenes/fondo.jpg);
+        background-size: 40%;
+      }
+      main {
+        /* Para poder centrar el contenido debemos adarle un width y un margen
+        derecho e izquerdo auto (no haría falta con el superior ni inferior) */
+        width: 70%;
+        margin: auto;
+      }
+      header {
+        margin-top: 50px; /* Separamos la cabecera de la parte superior de la página */
+      }
+      header h1 {
+        text-transform: uppercase; /* Pone las letras en mayúscula */
+        font-family: neutrons;
+        color: rgb(37, 101, 220);
+        font-size: 3em;
+        /* Podemos poner varias sombras separadas por comas, usar valores negativos ...*/
+        text-shadow: 1px 1px 1px black, 2px 2px 6px yellow;
+        text-align: center;
+      }
+      .mensaje,
+      .info_usuario,
+      .contenido_mensaje {
+        /* Por defecto, el padding y borde se suma al width que le demos a un elemento,
+        lo que puede darnos problemas. Con esta propiedad ya no los suma */
+        box-sizing: border-box;
+      }
+      /* Contenedor de la información del usuario y del mensaje */
+      .mensaje {
+        /* Como la primera columna es más corta (en alto) que la segunda, queda feo. 
+        Dándole al contenedor el mismo color que esa columna, lo resolvemos */
+        background-color: rgb(135, 187, 154);
+        margin: auto;
+        border: 1px green solid;
+        border-radius: 10px;
+        overflow: hidden; /* Como usamos un borde redondeado, algunos fondos de los
+                elementos internos, como la fecha, pueden quedar fuera de ese borde
+                redondeado, lo que queda feo. Con hidden ocultamos todo lo que queda
+                por fuera */
+        box-shadow: 2px 2px 2px grey;
+        margin-bottom: 20px; /* o usar margin: auto auto 20px; y quitar el
+                      margin: auto de arriba */
+        /* Como vamos a usar display: inline-block; para crear las columnas, esto
+        deajrá un pequeño espacio de unos pocos píxeles entre las columnas, lo que 
+        hará que no aparezcan en la misma línea, pues le damos un 20% y un 80% de ancho 
+        a las mismas, con lo que ese espacio hace que nos pasemos del 100%. El espacio lo
+        deja debido a que considera que son "palabras" al ser inline y debe haber un espacio entre ellas.
+        Una solución fácil es dar un tamaño de letra 0 para que desaparezca el espacio, 
+        pero luego tenemos que poner un tamaño de letra adecuado a cada columna */
+        font-size: 0;
+      }
+      /* La información del usuario: foto, nombre y mensajes escritos */
+      .info_usuario {
+        /* Para arreglar el problema de espacio entre las dos columnas, antes dimos
+        un font-size de 0 al contenedor, con lo que ahora tenemos que cambiarlo.
+        Usando 1rem le damos el tamaño que tiene la letra por defecto en la página,
+        independientemente del contenedor donde se encuentra */
+        font-size: 1rem;
+        background-color: rgb(135, 187, 154);
+        text-align: center;
+        /* Tened en cuenta que si al main le dimos un 70% del ancho de la ventana,
+        este 20% se refiere al contenedor, que es el main, con lo que es un 20% sobre el
+        mismo, el cual ya era un 70% sobre la ventana */
+        width: 20%;
+        max-width: 300px; /* Para establecer un ancho máximo */
+        padding: 20px 0;
+        font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+          sans-serif;
+        background-image: url(imagenes/lado.png);
+        background-repeat: no-repeat;
+        background-size: 20%;
+        /* Para que sea una columna */
+        display: inline-block;
+        /* Al usar display: inline-block, el texto no quedará arriba */
+        vertical-align: top;
+      }
+      /* Para el primer p que encuentre dentro de un elemento que tenga 
+      aplicada la clase .info_usuario.
+      No valdría first-child pues hay un img antes del p */
+      .info_usuario p:first-of-type {
+        font-weight: bold;
+      }
+      .info_usuario p {
+        margin-top: 0.7em;
+      }
+      /* El contenido del mensaje: fecha, text y botón responder */
+      .contenido_mensaje {
+        /* Para arreglar el problema de espacio entre las dos columnas, antes dimos
+        un font-size de 0 al contenedor, con lo que ahora tenemos que cambiarlo.
+        Usando 1rem le damos el tamaño que tiene la letra por defecto en la página,
+        independientemente del contenedor donde se encuentra */
+        font-size: 1rem;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        border-left: 2px solid rgb(6, 97, 16);
+        background-color: rgb(236, 234, 234);
+        color: brown;
+        /* Para la segunda columna */
+        display: inline-block;
+        /* A la primera columna le hemos dado un width de un 20% y, como hemos usado
+        box-sizing: border box, podemos darle un 80% a esta sin problema de que no
+        vaya a caber */
+        width: 80%;
+      }
+      .contenido_mensaje header {
+        background-color: darkgreen;
+        color: white;
+        text-align: right;
+        padding: 10px;
+        font-size: 0.9em; /* Un 10% menos */
+        /* Como anteriormente arriba dimos un margin-top del 50% a la etiqueta header, este header
+        también se verá afectado. Por ello le ponemos 0 */
+        margin-top: 0;
+      }
+      .contenido_mensaje p {
+        color: forestgreen;
+        text-align: justify;
+        padding: 1em;
+      }
+      .contenido_mensaje footer {
+        /* Para la líena entre el pie y el texto */
+        border-top: 2px green dotted;
+        text-align: right;
+      }
+      /* El botón */
+      .contenido_mensaje footer a {
+        /* Un enlace es de tipo en línea, con lo que no podemos darle márgenes superiores,
+        anchos, altos, .... Por ello lo convertimos a tipo bloque en línea */
+        display: inline-block;
+        margin: 10px;
+        padding: 5px;
+        background-color: rgb(187, 190, 192);
+        color: darkgreen;
+        text-decoration: none; /* Quitamos el subrayado del enlace */
+        border-radius: 10px;
+        border: 1px solid black;
+      }
+      /* Cambiamos el colro de fondo del enlace cuando el rató pase sobre él */
+      .contenido_mensaje footer a:hover {
+        background-color: rgb(234, 235, 236);
+      }
+      /* Uno de los mensajes es una respesuta a otro. Por ello le ponemos un margen
+      izquierdo para que vaya más hacia adentro */
+      .respuesta {
+        margin-left: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Foro electronica</h1>
+    </header>
+    <main>
+      <section class="mensaje">
+        <div class="info_usuario">
+          <img
+            src="imagenes/Hopstarter-Face-Avatars-Female-Face-FA-3.64.png"
+            alt="Sandra Alonso"
+          />
+          <p>Sandra Alonso</p>
+          <p>35 mensajes</p>
+        </div>
+        <div class="contenido_mensaje">
+          <header>
+            <time datetime="2024-03-21">Fecha: 21/03/2024</time>
+          </header>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae
+            dicta ducimus quae blanditiis, libero sequi soluta obcaecati ipsa
+            voluptate alias laboriosam, enim repellendus, delectus tempora.
+            Repellat id sequi iusto. Quo tempora in harum asperiores pariatur ut
+            consequuntur sed veritatis quis perspiciatis vitae accusamus earum
+            placeat ducimus, sint, ea fugit nisi aperiam, reprehenderit
+            voluptatum quaerat dicta mollitia vel. Ipsum, amet quasi eum ea quis
+            iusto laudantium nisi magni velit, repudiandae id labore doloribus!
+            Corrupti eveniet voluptas reprehenderit corporis aliquam odio,
+            temporibus illo voluptates alias, natus itaque numquam est saepe
+            libero optio voluptatem quasi? Numquam ipsum deserunt deleniti iusto
+            vero dolorum quod.
+          </p>
+          <footer>
+            <a href="">Responder</a>
+          </footer>
+        </div>
+      </section>
+      <section class="mensaje">
+        <div class="info_usuario">
+          <img
+            src="imagenes/Hopstarter-Face-Avatars-Female-Face-FI-2.64.png"
+            alt="Eva Sánchez"
+          />
+          <p>Eva Sánchez</p>
+          <p>200 mensajes</p>
+        </div>
+        <div class="contenido_mensaje">
+          <header>
+            <time datetime="2024-03-21">Fecha: 21/03/2024</time>
+          </header>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae
+            dicta ducimus quae blanditiis, libero sequi soluta obcaecati ipsa
+            voluptate alias laboriosam, enim repellendus, delectus tempora.
+            Repellat id sequi iusto. Quo tempora in harum asperiores pariatur ut
+            consequuntur sed veritatis quis perspiciatis vitae accusamus earum
+            placeat ducimus, sint, ea fugit nisi aperiam, reprehenderit
+            voluptatum quaerat dicta mollitia vel. Ipsum, amet quasi eum ea quis
+            iusto laudantium nisi magni velit, repudiandae id labore doloribus!
+            Corrupti eveniet voluptas reprehenderit corporis aliquam odio,
+            temporibus illo voluptates alias, natus itaque numquam est saepe
+            libero optio voluptatem quasi? Numquam ipsum deserunt deleniti iusto
+            vero dolorum quod.
+          </p>
+          <footer>
+            <a href="">Responder</a>
+          </footer>
+        </div>
+      </section>
+      <section class="mensaje">
+        <div class="info_usuario">
+          <img
+          src="imagenes/Hopstarter-Face-Avatars-Male-Face-E1.64.png"
+          alt=""
+        />
+        <p>Rodrigo Aluche</p>
+        <p>32 mensajes</p>
+        </div>
+        <div class="contenido_mensaje">
+          <header>
+            <time datetime="2024-03-13">Fecha: 13/03/2024</time>
+          </header>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae
+            dicta ducimus quae blanditiis, libero sequi soluta obcaecati ipsa
+            voluptate alias laboriosam, enim repellendus, delectus tempora.
+            Repellat id sequi iusto. Quo tempora in harum asperiores pariatur ut
+            consequuntur sed veritatis quis perspiciatis vitae accusamus earum
+            placeat ducimus, sint, ea fugit nisi aperiam, reprehenderit
+            voluptatum quaerat dicta mollitia vel. Ipsum, amet quasi eum ea quis
+            iusto laudantium nisi magni velit, repudiandae id labore doloribus!
+            Corrupti eveniet voluptas reprehenderit corporis aliquam odio,
+            temporibus illo voluptates alias, natus itaque numquam est saepe
+            libero optio voluptatem quasi? Numquam ipsum deserunt deleniti iusto
+            vero dolorum quod.
+          </p>
+          <footer>
+            <a href="">Responder</a>
+          </footer>
+        </div>
+      </section>
+      <section class="mensaje respuesta">
+        <div class="info_usuario">
+          <img
+            src="imagenes/Hopstarter-Face-Avatars-Female-Face-FE-2-blonde.64.png"
+            alt=""
+          />
+          <p>Eva Porras</p>
+          <p>45 mensajes</p>
+        </div>
+        <div class="contenido_mensaje">
+          <header>
+            <time datetime="2024-03-14">Fecha: 14/03/2024</time>
+          </header>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae
+            dicta ducimus quae blanditiis, libero sequi soluta obcaecati ipsa
+            voluptate alias laboriosam, enim repellendus, delectus tempora.
+            Repellat id sequi iusto. Quo tempora in harum asperiores pariatur ut
+            consequuntur sed veritatis quis perspiciatis vitae accusamus earum
+            placeat ducimus, sint, ea fugit nisi aperiam, reprehenderit
+            voluptatum quaerat dicta mollitia vel. Ipsum, amet quasi eum ea quis
+            iusto laudantium nisi magni velit, repudiandae id labore doloribus!
+            Corrupti eveniet voluptas reprehenderit corporis aliquam odio,
+            temporibus illo voluptates alias, natus itaque numquam est saepe
+            libero optio voluptatem quasi? Numquam ipsum deserunt deleniti iusto
+            vero dolorum quod.
+          </p>
+          <footer>
+            <a href="">Responder</a>
+          </footer>
+        </div>
+      </section>
+      <section class="mensaje">
+        <div class="info_usuario">
+          <img
+            src="imagenes/Hopstarter-Face-Avatars-Male-Face-C2.64.png"
+            alt=""
+          />
+          <p>Luis Sancho</p>
+          <p>133 mensajes</p>
+        </div>
+        <div class="contenido_mensaje">
+          <header>
+            <time datetime="2024-03-20">Fecha: 20/03/2024</time>
+          </header>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae
+            dicta ducimus quae blanditiis, libero sequi soluta obcaecati ipsa
+            voluptate alias laboriosam, enim repellendus, delectus tempora.
+            Repellat id sequi iusto. Quo tempora in harum asperiores pariatur ut
+            consequuntur sed veritatis quis perspiciatis vitae accusamus earum
+            placeat ducimus, sint, ea fugit nisi aperiam, reprehenderit
+            voluptatum quaerat dicta mollitia vel. Ipsum, amet quasi eum ea quis
+            iusto laudantium nisi magni velit, repudiandae id labore doloribus!
+            Corrupti eveniet voluptas reprehenderit corporis aliquam odio,
+            temporibus illo voluptates alias, natus itaque numquam est saepe
+            libero optio voluptatem quasi? Numquam ipsum deserunt deleniti iusto
+            vero dolorum quod.
+          </p>
+          <footer>
+            <a href="">Responder</a>
+          </footer>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
